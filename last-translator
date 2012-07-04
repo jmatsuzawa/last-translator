@@ -1,0 +1,30 @@
+#!/bin/sh
+usage() {
+  CMD=`basename $0`
+  echo "usage: ${CMD} [POFILE]"
+  echo "  If POFILE is not specified, modified ja.po in the current repository is used."
+}
+
+if [ $# -eq 0 ]; then
+  po=`git status --short | sed -n -e 's!^[[:space:]]*M[[:space:]]\{1,\}\([-[:alnum:]/]*ja.po\)$!\1!p'`
+else
+  po=$1
+fi
+
+if [ x"$po" = x ];then
+  echo "Could not find ja.po." >&2
+  echo >&2
+  usage >&2
+  exit 1
+fi
+if [ ! -f "$po" ]; then
+  echo "Could not find ${po}." >&2
+  echo >&2
+  usage >&2
+  exit 1
+fi
+
+sed -n -e '
+/^msgid ""$/,/^$/ {
+  s/^"Last-Translator: *\(.*\)\\n"$/\1/p
+}' $po
