@@ -6,7 +6,7 @@ usage() {
 }
 
 if [ $# -eq 0 ]; then
-  po=`git status --short | sed -n -e 's!^[[:space:]]*M[[:space:]]\{1,\}\([-[:alnum:]/]*ja.po\)$!\1!p'`
+  po=`git status --short | sed -n -e 's!^[[:space:]]*[AM][[:space:]]\{1,\}\([-[:alnum:]/]*ja.po\)$!\1!p'`
 else
   po=$1
 fi
